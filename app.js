@@ -1,137 +1,96 @@
-// getElementById
-let date = new Date();
+console.log('----------id指定----------');
 let hoge = document.getElementById('hoge');
-hoge.textContent = date.toLocaleString();
+console.log(hoge);
+console.log(hoge.tagName);
+console.log(hoge.id);
+console.log(hoge.textContent);
 
-
-// getElementsByname
-let list = document.getElementsByTagName('a');
-console.log(list);
-for (let i = 0, len = list.length; i < len; i++) {
-  console.log(list.item(i).href);
-}
-
-// getElementsByName
-// 戻り値はNodeListオブジェクト
-let name = document.getElementsByName('email')
-console.log(name[0].value);
-
-//getElementsByClassName
+console.log('----------class指定----------');
 let fuga = document.getElementsByClassName('fuga');
+console.log(fuga);
 for (let i = 0, len = fuga.length; i < len; i++) {
   console.log(fuga.item(i).textContent);
 }
 
-//class名を複数していると全てを含んでいる要素を返す
-let moge = document.getElementsByClassName('fuga moge');
-for (let i = 0, len = moge.length; i < len; i++) {
-  console.log(moge.item(i).className);
+console.log('----------タグ指定----------');
+let list = document.getElementsByTagName('li');
+console.log(list);
+for (let i = 0, len = list.length; i < len; i++) {
+  console.log(list.item(i).textContent);
 }
-
-// querySelector
-// 戻り値はElementオブジェクト(単一の要素)
-let tako = document.querySelector('#tako .ika');
-console.log(tako.tagName);
-
-// querySelectorAll
-// 戻り値はNodeListオブジェクト
-let ika = document.querySelectorAll('#tako .ika');
-for (let item of ika) {
-  console.log(item.tagName);
-}
-//getxxx id, classで特定できる時
-//queryxxx 複雑な条件で検索が必要な時
 
 //ノードウォーキング
+console.log('----------親子要素の取得----------');
 let fruits = document.getElementById('fruits');
-fruits.childNodes;
+console.log(fruits);
+
+console.log('----------親');
+let parent = fruits.parentNode;
+console.log(parent);
+console.log(parent.id);
+
+console.log('----------子');
+let children = fruits.children;
+console.log(children);
 for (let item of fruits) {
-  if (item.nodeType === 1) {
-    console.log(item.value);
-  }
-}
-//子要素は要素ノードだけとは限らない(テキストノードの可能性もある)
-//今回は要素ノードだけを取得したいのでif文を使っている
-
-//イベントハンドラー
-function btna_click() {
-  window.alert('ボタンAがクリックされました。')
+  console.log(item.textContent);
 }
 
-//画面がロードされた時
-//コンテンツ + 画像がロードされたら
-window.onload = function() {
-  //ボタンがクリックされた時のイベントを登録
-  document.getElementById('btnB').onclick = function() {
-    window.alert('ボタンBがクリックされました');
-  }
+console.log('----------イベント----------');
+let btn = document.getElementById('btn');
+// document.getElementById('btn').addEventListener('click', function() {
+btn.addEventListener('click', function() {
+  window.alert('ボタンがクリックされました');
+});
+
+console.log('----------要素の追加----------');
+let add = document.getElementById('add');
+add.addEventListener('click', function() {
+  let target = document.getElementById('target');
+  target.textContent = '追加ボタンがクリックされました'
+});
+
+console.log('----------スタイルの変化----------');
+let change = document.getElementById('change');
+change.addEventListener('click', function() {
+  let target = document.getElementById('target2');
+
+  //直接スタイルを指定
+  target.style.backgroundColor = '#000';
+
+  //classを追加(削除)
+  target.classList.add('large'); //classを追加
+  // target.classList.remove('large'); //class削除
+  // target.classList.toggle('large'); //toggle
+});
+
+console.log('----------関数----------');
+/**
+ * 書き方③を使う(PHPと同じ構文のため)
+ * google検索した時に混乱しないよう複数書き方があることは説明
+ */
+
+//書き方①
+// let changeBg = function() {
+//   let target = document.getElementById('target3');
+//   target.classList.toggle('bg-dark');
+//   target.classList.toggle('bg-red');
+// }
+
+//書き方②
+// let changeBg = () => {
+//   let target = document.getElementById('target3');
+//   target.classList.toggle('bg-dark');
+//   target.classList.toggle('bg-red'); 
+// }
+
+//書き方③
+function changeBg() {
+  let target = document.getElementById('target3');
+  target.classList.toggle('bg-dark');
+  target.classList.toggle('bg-red');
 }
 
-//イベントリスナー
-//DOMContentLoadedイベントリスナー→コンテンツのロードが終わったら実行
-//画像のロードは待たない
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('btnC').addEventListener('click', function() {
-    window.alert('ボタンCがクリックされました');
-  }, false);
-}, false);
+let func = document.getElementById('func');
+func.addEventListener('click', changeBg);
 
-
-//textContent, innerHTML 
-document.addEventListener('DOMContentLoaded', function() {
-
-  // 値をセット
-  document.getElementById('text').textContent = 
-  '<a href="https://amazon.com">amazon</a>';
-
-  document.getElementById('html').innerHTML = 
-  '<a href="https://amazon.com">amazon</a>';
-  //共通点 -> 配下のテキストを置き換える
-  //相違点 -> html要素にするか否
-
-
-  //値をゲット
-  let textElm = document.getElementById('text2');
-  console.log(textElm.textContent);
-
-  let htmlElm = document.getElementById('text2');
-  console.log(htmlElm.innerHTML);
-  //相違点 textConTent -> 文字だけ innerHTML -> HTML全て
-
-}, false);
-
-//innerHTMLはユーザーからの入力を直接扱わないように注意
-
-//Form要素へのアクセス
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('submit').addEventListener('click', function() {
-    let name = document.getElementById('input_name');
-    console.log(name.value);
-
-    let foods = document.getElementsByName('food');
-    let foodsArr = [];
-    for (let v of foods) {
-      if (v.checked) {
-        foodsArr.push(v.value);
-      }
-    }
-    console.log(foodsArr);
-  }, false)
-
-  document.getElementById('file').addEventListener('change', function(e) {
-    let file = document.getElementById('file').files;
-    for (let v of file) {
-      console.log(v);
-      console.log(v.name);
-      console.log(v.size);
-    }
-
-    //ファイルを画面に表示
-    let reader = new FileReader();
-    reader.addEventListener('load', function(e) {
-      document.getElementById('upload-img').src = reader.result;
-    }, true);
-    reader.readAsDataURL(file[0]);
-
-  }, true);
-}, false);
